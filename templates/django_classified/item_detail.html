@@ -1,0 +1,187 @@
+{% extends "django_classified/base.html" %}
+
+{% load classified %}
+{% load humanize %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block title %}{{ object.title }}{% endblock title %}
+{% block meta_description %}{{ object.description }}{% endblock meta_description %}
+{% block meta_keywords %}{{ object.get_keywords }}{% endblock meta_keywords %}
+
+{% block meta_og %}
+  <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}"/>
+  <meta property="og:title" content="{{ object.title }}"/>
+  <meta property="og:description" content="{{ object.description }}"/>
+  {% for img in object.image_set.all %}
+    {% thumbnail img.file "x800" as im %}
+      <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}"/>
+      <meta property="og:image:alt" content="{{ object.title }}"/>
+    {% endthumbnail %}
+  {% endfor %}
+  
+{% endblock %}
+
+
+{% block body %}
+<style>
+  
+  .btn-primary {
+    color: #fff;
+    background-color: #072d4e;
+    border-color: #072d4e;
+}
+  .large-paragraph {
+    font-size: 4rem; /* Adjust this value to make the text larger */
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  .postingBody {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Adjust height as needed */
+  }
+  .postingBody p {
+    text-align: center;
+    font-size: large;
+    color: #072d4e;
+  }
+  .postingBody {
+     margin-right:1px; 
+  }
+</style>
+
+<div itemscope itemtype="http://schema.org/Product">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>
+        {% if object.area %}
+          {{ object.area }}&nbsp;&gt;&nbsp;
+        {% endif %}
+        <a href='{{ object.group.get_absolute_url }}'>{{ object.group }}</a>
+      </h3>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-lg-12">
+      <h2 itemprop="name">{{ object.title }}</h2>
+    </div>
+    <div class="col-lg-3">
+      <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <meta itemprop="priceCurrency" content="{{ DCF.CURRENCY }}"/>
+        <h2 itemprop="price" content="{{ object.price|floatformat }}">{{ object.price|currency }}</h2>
+      </span>
+    </div>
+  </div>
+  <div class="mainBody">
+    <br>
+    <div id="postingTitle">
+      <h1>{{ object.title }}</h1>
+    </div>
+    
+    {% if object.image_count %}
+    <ul id="viewAdPhotoLayout" class="fivePlus">
+      {% for img in object.image_set.all %}
+        {% thumbnail img.file "360x450" crop="center" as im %}
+          <li>
+            <a href="javascript:void(0);">
+              <img src="{{ im.url }}" width="100%" border="0" alt="{{ object.title }}" title="{{ object.title }}">
+            </a>
+          </li>
+        {% endthumbnail %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+  
+    <!-- Description centered horizontally and vertically -->
+    <div class="row mt-3 d-flex justify-content-center align-items-center" style="height: 100%;">
+      <div class="col-lg-9 text-center" itemprop="description">
+        <div class="posting">
+          <div class="postingBody">
+            <p class="p_pink"></p>
+            <p class="p_pink">{{ object.description|linebreaks }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("pageBackground").style.marginLeft = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("pageBackground").style.marginLeft= "0";
+}
+
+function hideAndShow(hideId, showId, changeText) {
+  var hide = document.getElementById(hideId);
+  var show = document.getElementById(showId);
+  if (show.style.display === "none") {
+    show.style.display = "block";
+    if (changeText == "yes") {
+      hide.innerHTML = "Hide Reply";
+    }
+  } else {
+    show.style.display = "none";
+    if (changeText == "yes") {
+      hide.innerHTML = "Reply";
+    }
+  }
+}
+
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+      const callButton = document.getElementById('call-button');
+      if (callButton) {
+          callButton.addEventListener('click', () => {
+              const phoneNumber = '{{ object.phone }}';
+              window.location.href = `tel:${phoneNumber}`;
+          });
+      }
+  });
+  </script>
+  
+
+
+
+    <!-- Footer -->
+    <div id="footer">
+      <div class="invisible-div"> </div>
+
+<style>
+  .invisible-div {
+    display: none;
+  }
+</style>
+  </div>
+  {% if object.phone %}
+  <div class="row">
+      <div class="col-md-12">
+        Contract:
+              <button id="call-button" class="btn btn-success">
+                  {{ object.phone }}
+              </button>
+      </div>
+  </div>
+{% endif %}
+  {% endblock %}
+  <ul id="navLinkList">
+      <li>&nbsp; 2023. <a href="{% url 'django_classified:index' %}" class="homefootcls">Localrubsmap.com</a> All Rights Reserved.</li>
+  </ul>
+</div>
+<div class="endpage" id="endpage"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

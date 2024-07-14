@@ -1,0 +1,160 @@
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="shortcut icon" href="#">
+<title>{% block title %}{% endblock title %} | {{ DCF.SITE_NAME }}</title>
+
+<meta name="description"
+      content="{% block meta_description %}{{ DCF.SITE_DESCRIPTION }}{% endblock meta_description %}"/>
+<meta name="keywords" content="{% block meta_keywords %}{% endblock meta_keywords %}"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'django_classified/css/style.css' %}" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="{% static 'django_classified/css/cat.css' %}">
+    <link rel="stylesheet" href="{% static 'django_classified/css/cat_in.css' %}">
+	<link href="{% static 'django_classified/css/alert.css' %}" rel="stylesheet">
+	<link href="{% static 'django_classified/css/upload.css' %}" rel="stylesheet">
+	<script>const VerL=0;</script>
+	<!--[if (gte IE 9)|!(IE)]><!-->
+	<script src="{% static 'django_classified/js/jquery.min.js' %}"></script>
+	<!--<![endif]-->
+	<!--[if lte IE 8 ]>
+	<script src="/static/js/jquery1.11.3.min.js"></script>
+	<![endif]-->
+	<script src="{% static 'django_classified/js/app.js' %}"></script>
+	<script src="{% static 'django_classified/js/alert.js' %}"></script>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style>
+.navbar-nav {
+    list-style: none; /* Remove default list styling */
+    padding-left: 0;  /* Remove default padding */
+    margin: 0;        /* Remove default margin */
+}
+
+.nav-item {
+    list-style: none; 
+} 
+a {
+    color: #072d4e;
+    --tw-text-opacity: 1;
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.75rem; 
+    text-decoration: none;  
+}  
+h4 {
+    color: #072d4e;
+    --tw-text-opacity: 1;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1.75rem; 
+}
+.text-primary-600 {
+            --tw-text-opacity: 1;
+            color: #072d4e;
+        }
+#home[class] #mainWrapper {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto 12px;
+    text-align: left;
+}
+.ad-banner{
+    position:absolute;
+    width:468px;
+    height:80px;
+    /*background:url(/upload/ad.gif) center center no-repeat;*/
+    left:300px;
+    top:0;
+    z-index:1;
+}
+@media (max-width:720px) {
+    .ad-banner{
+        display:none;
+        position:relative;
+        width:100%;
+        left:auto;
+        top:auto;
+    }
+}
+</style>
+</head>
+<body id="home" class="backpage">
+<div id="mainWrapper">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'django_classified:index' %}">
+                <h4 class="text-primary-600 dark:text-primary-500 text-xl font-semibold">{{ DCF.SITE_NAME }}</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto"> <!-- ml-auto ensures items are pushed to the right -->
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'django_classified:item-new' %}">Post Ads <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'django_classified:user-items' %}">{% trans "Your ads" %} ({{ user.item_set.count }})</a>
+                            <a class="dropdown-item" href="{% url 'add_credit' %}">{% trans "Add credit" %}</a>
+                            <a class="dropdown-item" href="{% url 'django_classified:profile' %}">{% trans "My account" %}</a>
+                        </div>
+                    </li>
+                    <form method="post" action="{% url 'django_classified:logout' %}?next=/" class="form-inline my-2 my-lg-0">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">{% trans "Logout" %}</button>
+                    </form>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        {% if messages %}
+        {% for message in messages %}
+          <div class='row'>
+            <div class="col-md-12">
+              <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                {{ message|safe }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+        <!-- End Navbar -->
+
+   
+    {% block body %}
+
+    {% endblock body %}   
+
+    <!-- Footer -->
+    <div id="footer">
+        <div> </div>
+    </div>
+    <ul id="navLinkList">
+        <li>&nbsp; 2023. <a href="{% url 'django_classified:index' %}" class="homefootcls">Localrubsmap.com</a> All Rights Reserved.</li>
+    </ul>
+</div>
+<div class="endpage" id="endpage"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

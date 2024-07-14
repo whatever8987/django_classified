@@ -1,0 +1,26 @@
+{% extends "django_classified/_base.html" %}
+
+{% load i18n bootstrap %}
+
+{% block title %}{% trans "Profile" %}{% endblock title %}
+
+{% block body %}
+<div class="container">
+  <div class="row justify-content-center">
+      <div class="col-md-5">
+          <div class="card mt-5">
+            <div class="card-body">
+      <h2>{{ user.username }}</h2>
+      <form method="post" role="form">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <p><strong>{% trans "Balance" %}:$</strong> {{ request.user.profile.balance }}</p>
+        <input type="submit" value="{% trans "Update" %}" class="btn btn-primary btn-bloc">
+        <a href="{% url 'add_credit' %}" class="btn btn-outline-danger my-2 my-sm-0">Add credit</a>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}

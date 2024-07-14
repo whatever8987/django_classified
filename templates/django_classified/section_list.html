@@ -1,0 +1,35 @@
+{% extends "django_classified/_base.html" %}
+
+{% block title %}
+    {{ DCF.SITE_NAME }}
+{% endblock title %}
+
+{% block body %}
+    <!--section list-->
+    {% for area_item in area_list %}
+        <div class="united-states geoBlock">
+            <h2 id="unitedStates">{{ area_item }}</h2>
+            <div id="geoListings">
+                <div class="column">
+                    <div class="united-states geoBlock">
+                        <div class="inner">
+                            {% for section in area_item.section_set.all %}
+                                <div class="geoUnit">
+                                    <h3><a href="#">{{ section.title }}</a></h3>
+                                    {% for group in section.group_set.all %}
+                                        {% if group.count > 0 or DCF.DISPLAY_EMPTY_GROUPS %}
+                                            <ul>
+                                                <li><a href="{{ group.get_absolute_url }}">{{ group.title }}</a></li>
+                                            </ul>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <!--end section list-->
+{% endblock %}

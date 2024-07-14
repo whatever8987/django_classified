@@ -1,0 +1,12 @@
+{% extends "django_classified/_base.html" %}
+
+{% block title %}
+Insufficient fund. Please add more credit
+{% endblock %}
+
+{% block body %}
+<div>
+    <p>Your balance is {{ user.profile.balance }}. Please add more credit to continue.</p>
+    <a href="#" class="btn btn-primary">Add Credit</a>
+</div>
+{% endblock body %}
