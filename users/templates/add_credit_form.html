@@ -1,0 +1,47 @@
+{% extends "django_classified/_base.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset>
+                            <legend class="border-bottom mb-4">Add Credit</legend>
+                            <div class="form-group">
+                                <label for="usd_amount">Amount in USD:</label>
+                                <input type="number" name="usd_amount" id="usd_amount" class="form-control" placeholder="Enter amount" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+        /* Additional styles can be added here */
+        /* Example: Custom hover effect for the login button */
+        .btn btn-primary btn-block {
+            background-color: #dc2e02; /* Darker shade of primary color on hover */
+        }
+        /* Custom style for the "Log in" text */
+        .btn-primary span {
+            color: black; /* Set text color to black */
+        }
+        /* Ensure button color stays consistent */
+        .btn-primary {
+            background-color: #dc2e02; /* Set primary button background color */
+            color: white; /* Set primary button text color */
+        }
+    </style>
+{% endblock %}

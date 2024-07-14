@@ -1,0 +1,40 @@
+{% extends "django_classified/_base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+    .qr-code {
+        text-align: center; /* Center align the content */
+    }
+
+    .qr-code img {
+        max-width: 80%; /* Ensure the QR code image doesn't exceed its container */
+        height: auto; /* Maintain aspect ratio */
+        display: inline-block; /* Ensure image is treated as a block element */
+        margin-top: 20px; /* Add some top margin for spacing */
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="input-box">
+                            <label for="id_balance">Please send Bitcoin to this wallet</label>
+                            <input type="text" id="id_balance" class="form-control" value="{{ user.first_name }}" readonly>
+                        </div>
+                        <div class="qr-code">
+                            <!-- Resize the QR code image -->
+                            <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
